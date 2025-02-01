@@ -2,14 +2,19 @@
 
 import { Todo } from "@/types/todo";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { endOfWeek, isWithinInterval, startOfWeek } from "date-fns";
-import { useState } from "react";
-import AddTodoForm from "./components/AddTodoForm";
-import TodoList from "./components/TodoList";
+import { useEffect, useState } from "react";
+import AddTodoForm from "./_components/AddTodoForm";
+import TodoList from "./_components/TodoList";
 
 export default function TodoPage() {
   const [error, setError] = useState<string>("");
   const queryClient = useQueryClient();
+
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   // Fetch todos query
   const { data: todos = [] } = useQuery<Todo[]>({
@@ -18,8 +23,9 @@ export default function TodoPage() {
       const response = await fetch("/api/todos");
       return response.json();
     },
+    enabled: isHydrated, // hydration이 완료된 후에만 쿼리 실행
     refetchInterval: 1000 * 60 * 60, // 1시간마다 리페치
-    staleTime: 1000 * 60 * 60, // 1시간동안 데이터를 fresh로 유지
+    staleTime: 0,
   });
 
   // Add todo mutation
