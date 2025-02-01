@@ -44,7 +44,7 @@ export default function AddTodoForm({ onAdd }: AddTodoFormProps) {
         />
         <button
           type="submit"
-          className="px-4 py-2 bg-point text-white rounded hover:bg-point-hover"
+          className="px-4 py-2 bg-point text-white rounded hover:bg-point-hover whitespace-nowrap"
         >
           추가
         </button>
