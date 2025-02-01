@@ -32,7 +32,7 @@ export default function AddTodoForm({ onAdd }: AddTodoFormProps) {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="할일을 입력하세요"
-          className="flex-1 p-2 text-black border rounded"
+          className="flex-1 p-2 text-black border rounded outline-none"
           required
         />
         <input

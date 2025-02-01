@@ -38,12 +38,16 @@ export default function TodoItem({
     <div className="flex items-center justify-between p-4 text-black bg-white rounded-lg shadow">
       {isEditing ? (
         <div className="flex items-center space-x-4 flex-1">
-          <input
-            type="checkbox"
-            checked={todo.completed}
-            onChange={(e) => onUpdate(todo.id, { completed: e.target.checked })}
-            className="h-4 w-4 text-black"
-          />
+          <label className="flex items-center p-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={(e) =>
+                onUpdate(todo.id, { completed: e.target.checked })
+              }
+              className="h-4 w-4 text-black"
+            />
+          </label>
           <div className="flex flex-1 items-center space-x-2">
             <input
               type="text"
@@ -74,14 +78,16 @@ export default function TodoItem({
       ) : (
         <>
           <div className="flex items-center space-x-4">
-            <input
-              type="checkbox"
-              checked={todo.completed}
-              onChange={(e) =>
-                onUpdate(todo.id, { completed: e.target.checked })
-              }
-              className="h-4 w-4 text-black"
-            />
+            <label className="flex items-center p-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={(e) =>
+                  onUpdate(todo.id, { completed: e.target.checked })
+                }
+                className="h-4 w-4 text-black"
+              />
+            </label>
             <div className="flex flex-col">
               <span
                 className={todo.completed ? "line-through text-gray-500" : ""}
