@@ -23,6 +23,8 @@ export default function TodoList({
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [tomatoCount, setTomatoCount] = useState(0);
+  const [notificationPermission, setNotificationPermission] =
+    useState<NotificationPermission>("default");
 
   useEffect(() => {
     setToday(format(new Date(), "yyyy-MM-dd"));
@@ -44,6 +46,29 @@ export default function TodoList({
   }, [today]);
 
   useEffect(() => {
+    // 알림 권한 확인
+    if ("Notification" in window) {
+      setNotificationPermission(Notification.permission);
+    }
+  }, []);
+
+  const requestNotificationPermission = async () => {
+    if ("Notification" in window) {
+      const permission = await Notification.requestPermission();
+      setNotificationPermission(permission);
+    }
+  };
+
+  const showNotification = () => {
+    if ("Notification" in window && notificationPermission === "granted") {
+      new Notification("신선한 🍅가 수확되었어요!", {
+        body: "포모도로 타이머가 완료되었습니다.",
+        icon: "/icons/icon-192x192.png",
+      });
+    }
+  };
+
+  useEffect(() => {
     let timer: NodeJS.Timeout;
 
     if (isRunning && !isPaused && remainingTime > 0) {
@@ -55,6 +80,7 @@ export default function TodoList({
             const newCount = tomatoCount + 1;
             setTomatoCount(newCount);
             Cookies.set("tomatoCount", newCount.toString(), { expires: 1 });
+            showNotification();
             return 0;
           }
           return prev - 1;
@@ -63,10 +89,16 @@ export default function TodoList({
     }
 
     return () => clearInterval(timer);
-  }, [isRunning, isPaused, remainingTime, tomatoCount]);
+  }, [isRunning, isPaused, remainingTime, tomatoCount, notificationPermission]);
 
   const startTimer = () => {
     if (timeOption === 0) return;
+
+    // 타이머 시작 전에 알림 권한 요청
+    if (notificationPermission === "default") {
+      requestNotificationPermission();
+    }
+
     if (!isRunning && !isPaused) {
       setRemainingTime(timeOption * 60);
     }
@@ -100,6 +132,14 @@ export default function TodoList({
               </span>{" "}
               Pomodoro Timer
             </h2>
+            {notificationPermission === "default" && (
+              <button
+                onClick={requestNotificationPermission}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                알림 권한 허용하기
+              </button>
+            )}
             <div className="flex items-center space-x-4">
               <select
                 value={timeOption}

@@ -20,7 +20,7 @@ export default function TodoClient({ initialTodos }: TodoClientProps) {
       const response = await fetch("/api/todos");
       return response.json();
     },
-    staleTime: 1000 * 60 * 60, // 1시간동안 캐시 데이터를 사용
+    staleTime: 0,
     initialData: initialTodos,
   });
 

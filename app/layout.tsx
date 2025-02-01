@@ -3,8 +3,19 @@ import "./globals.css";
 import Providers from "./providers";
 
 export const metadata: Metadata = {
-  title: "Todo Pomodoro",
+  title: "🍅 Weekly Pomodoros 🍅",
   description: "Todo app with Pomodoro timer",
+  manifest: "/manifest.json",
+  themeColor: "#000000",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "🍅 Weekly Pomodoros 🍅",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export default function RootLayout({
