@@ -84,7 +84,7 @@ export default function TodoList({
     return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
-  const renderTomatoes = useCallback(() => {
+  const renderPomodoros = useCallback(() => {
     if (!tomatoCount) return null;
     return Array(tomatoCount).fill("🍅").join("");
   }, [tomatoCount]);
@@ -136,7 +136,7 @@ export default function TodoList({
               <p className="text-3xl font-bold text-black">
                 오늘의 수확량: {tomatoCount}개
                 <span aria-label={`${tomatoCount} tomatoes`} role="img">
-                  {renderTomatoes()}
+                  {renderPomodoros()}
                 </span>
               </p>
             </div>

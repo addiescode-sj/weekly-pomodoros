@@ -2,30 +2,26 @@
 
 import { Todo } from "@/types/todo";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AddTodoForm from "./_components/AddTodoForm";
 import TodoList from "./_components/TodoList";
 
-export default function TodoPage() {
+interface TodoPageProps {
+  initialTodos: Todo[];
+}
+
+export default function TodoPage({ initialTodos }: TodoPageProps) {
   const [error, setError] = useState<string>("");
   const queryClient = useQueryClient();
 
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  // Fetch todos query
-  const { data: todos = [] } = useQuery<Todo[]>({
+  const { data: todos = initialTodos } = useQuery<Todo[]>({
     queryKey: ["todos"],
     queryFn: async () => {
       const response = await fetch("/api/todos");
       return response.json();
     },
-    enabled: isHydrated, // hydration이 완료된 후에만 쿼리 실행
-    refetchInterval: 1000 * 60 * 60, // 1시간마다 리페치
-    staleTime: 0,
+    staleTime: 1000 * 60 * 60, // 1시간동안 캐시 데이터를 사용
+    initialData: initialTodos,
   });
 
   // Add todo mutation
@@ -39,6 +35,7 @@ export default function TodoPage() {
       return response.json();
     },
     onSuccess: () => {
+      // 쿼리 즉시 무효화
       queryClient.invalidateQueries({ queryKey: ["todos"] });
       setError("");
     },
@@ -64,6 +61,7 @@ export default function TodoPage() {
       return response.json();
     },
     onSuccess: () => {
+      // 쿼리 즉시 무효화
       queryClient.invalidateQueries({ queryKey: ["todos"] });
       setError("");
     },
@@ -80,6 +78,7 @@ export default function TodoPage() {
       });
     },
     onSuccess: () => {
+      // 쿼리 즉시 무효화
       queryClient.invalidateQueries({ queryKey: ["todos"] });
       setError("");
     },

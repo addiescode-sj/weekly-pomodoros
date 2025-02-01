@@ -24,17 +24,17 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const todos = await   getTodosFromCookies();
-  
+  const todos = await getTodosFromCookies();
+
   const todo: Todo = {
     ...body,
     id: Date.now().toString(),
     createdAt: new Date().toISOString(),
   };
-  
+
   todos.push(todo);
   saveTodosToCookies(todos);
-  
+
   return NextResponse.json(todo, { status: 201 });
 }
 
@@ -42,7 +42,7 @@ export async function PUT(request: Request) {
   const body = await request.json();
   const { id, ...updates } = body;
   const todos = await getTodosFromCookies();
-  
+
   const todoIndex = todos.findIndex((todo) => todo.id === id);
   if (todoIndex === -1) {
     return NextResponse.json({ message: "Todo not found" }, { status: 404 });
@@ -50,7 +50,7 @@ export async function PUT(request: Request) {
 
   todos[todoIndex] = { ...todos[todoIndex], ...updates };
   saveTodosToCookies(todos);
-  
+
   return NextResponse.json(todos[todoIndex]);
 }
 
@@ -66,6 +66,6 @@ export async function DELETE(request: Request) {
 
   const deletedTodo = todos.splice(deleteIndex, 1)[0];
   saveTodosToCookies(todos);
-  
+
   return NextResponse.json(deletedTodo);
 }
