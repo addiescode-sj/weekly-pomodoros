@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 
 // Dynamic import of TodoPage
-const TodoPage = dynamic(() => import("./todo/page"), {
+const TodoClient = dynamic(() => import("./todo/_components/TodoClient"), {
   loading: () => (
     <div className="min-h-screen p-8">
       <h1 className="text-3xl font-bold mb-8">Weekly Pomodoros 🍅</h1>
@@ -24,5 +24,5 @@ export default async function Home() {
   const todosStr = cookieStore.get("todos")?.value;
   const initialTodos = todosStr ? JSON.parse(todosStr) : [];
 
-  return <TodoPage initialTodos={initialTodos} />;
+  return <TodoClient initialTodos={initialTodos} />;
 }

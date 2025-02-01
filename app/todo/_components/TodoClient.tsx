@@ -3,14 +3,14 @@
 import { Todo } from "@/types/todo";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import AddTodoForm from "./_components/AddTodoForm";
-import TodoList from "./_components/TodoList";
+import AddTodoForm from "./AddTodoForm";
+import TodoList from "./TodoList";
 
-interface TodoPageProps {
+interface TodoClientProps {
   initialTodos: Todo[];
 }
 
-export default function TodoPage({ initialTodos }: TodoPageProps) {
+export default function TodoClient({ initialTodos }: TodoClientProps) {
   const [error, setError] = useState<string>("");
   const queryClient = useQueryClient();
 
